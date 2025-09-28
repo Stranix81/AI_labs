@@ -138,6 +138,32 @@ namespace AI_lab1.Library
         }
 
         /// <summary>
+        /// Finds the path using depth-first search with L+1 limit
+        /// </summary>
+        /// <param name="start">Initial coordinates</param>
+        /// <param name="target">Target coordinates</param>
+        /// <returns> The path in the type of
+        /// <see cref="List{Node}"/>, 
+        /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
+        public List<Node>? FindPathLimitedDFS((int x, int y) start, (int x, int y) target)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Finds the path using bidirectional search
+        /// </summary>
+        /// <param name="start">Initial coordinates</param>
+        /// <param name="target">Target coordinates</param>
+        /// <returns> The path in the type of
+        /// <see cref="List{Node}"/>, 
+        /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
+        public List<Node>? FindPathBiBFS((int x, int y) start, (int x, int y) target)
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Calculates the cube's CubeOrientation after movement
         /// </summary>
         /// <param name="CubeOrientation">Cube's original CubeOrientation</param>

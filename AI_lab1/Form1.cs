@@ -17,21 +17,30 @@ namespace AI_lab1
     {
         private (int rows, int cols) fieldSize = default;
         private (int x, int y)? cubePos = null;
+        private (int x, int y)? cubePosPrevious = null;
         private (int x, int y)? markPos = null;
+        private (int x, int y)? markPosPrevious = null;
         private AddingStates addingState = AddingStates.None;
         private Button[,] fieldCells;
         private CellStates[,] cellStates;
+        private NodeForRestore?[,] nodesCurrent;
+        private NodeForRestore?[,] nodesPrevious;
+        private CancellationTokenSource showPathCancellation;
 
         public Form1()
         {
             InitializeComponent();
 
-            checkBoxBFS.Checked = true;
-            checkBoxDFS.Checked = false;
+            radioButtonBFS.Checked = true;
+            buttonRestore.Enabled = false;
+            buttonSkip.Enabled = false;
+            buttonClear.Enabled = false;
 
             fieldSize = (tableLayoutPanelField.RowCount, tableLayoutPanelField.ColumnCount);
             fieldCells = new Button[tableLayoutPanelField.RowCount, tableLayoutPanelField.ColumnCount];
             cellStates = new CellStates[tableLayoutPanelField.RowCount, tableLayoutPanelField.ColumnCount];
+            nodesCurrent = new NodeForRestore[tableLayoutPanelField.RowCount, tableLayoutPanelField.ColumnCount];
+            nodesPrevious = new NodeForRestore[tableLayoutPanelField.RowCount, tableLayoutPanelField.ColumnCount];
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -69,6 +78,7 @@ namespace AI_lab1
                                     button.BackColor = Color.Blue;
                                     button.Text = "Cube";
                                     cubePos = (x, y);
+                                    nodesCurrent[x, y] = new NodeForRestore(x, y, "Cube", Color.Blue, false);
                                     break;
                                 }
                             case AddingStates.AddingMark:
@@ -83,6 +93,7 @@ namespace AI_lab1
                                     button.BackColor = Color.Red;
                                     button.Text = "Mark";
                                     markPos = (x, y);
+                                    nodesCurrent[x, y] = new NodeForRestore(x, y, "Mark", Color.Red, false);
                                     break;
                                 }
                             case AddingStates.AddingAbyss:
@@ -90,13 +101,13 @@ namespace AI_lab1
                                     button.BackColor = Color.Black;
                                     button.Text = "Abyss";
                                     cellStates[x, y] = CellStates.Abyss;
+                                    nodesCurrent[x, y] = new NodeForRestore(x, y, "Abyss", Color.Black, true);
                                     break;
                                 }
                             default:
                                 { break; }
                         }
                     };
-
                     fieldCells[i, j] = button;
                     tableLayoutPanelField.Controls.Add(button, j, i);   //adding the button
                 }
@@ -127,18 +138,30 @@ namespace AI_lab1
 
         private void Clear()
         {
-            checkBoxBFS.Checked = false;
-            checkBoxDFS.Checked = false;
+            radioButtonBFS.Checked = true;
+            radioButtonDFS.Checked = false;
+            radioButtonLimitedDFS.Checked = false;
+            radioButtonBiBFS.Checked = false;
             cubePos = null;
             markPos = null;
-            for (int i = 0; i < 8; i++)
-                for (int j = 0; j < 8; j++)
+
+            for (int i = 0; i < fieldSize.rows; i++)
+                for (int j = 0; j < fieldSize.cols; j++)
                 {
                     cellStates[i, j] = CellStates.Clean;
                     fieldCells[i, j].Image = null;
                     fieldCells[i, j].Text = "";
                     fieldCells[i, j].BackColor = Color.White;
+                    nodesCurrent[i, j] = null;
                 }
+
+            addingState = AddingStates.None;
+
+            buttonStart.Enabled = true;
+            buttonRestore.Enabled = true;
+            buttonAbyss.Enabled = true;
+            buttonCube.Enabled = true;
+            buttonMark.Enabled = true;
         }
 
         private async void buttonStart_Click(object sender, EventArgs e)
@@ -148,23 +171,26 @@ namespace AI_lab1
                 MessageBox.Show("The cube or the red mark are not placed on the field!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            cubePosPrevious = cubePos;
+            markPosPrevious = markPos;
+            for (int i = 0; i < fieldSize.rows; i++)
+            {
+                for (int j = 0; j < fieldSize.cols; j++)
+                    nodesPrevious[i, j] = nodesCurrent[i, j];
+            }
 
             var solver = new Solver(cellStates);
 
 
             Func<(int x, int y), (int x, int y), List<Node>?>? findMethod = null;
 
-            if (checkBoxBFS.Checked && !checkBoxDFS.Checked)
-            {
-                findMethod = solver.FindPathBFS;
-            }
-            else if (checkBoxDFS.Checked && !checkBoxBFS.Checked)
-            {
-                findMethod = solver.FindPathDFS;
-            }
+            if (radioButtonBFS.Checked) findMethod = solver.FindPathBFS;
+            else if (radioButtonDFS.Checked) findMethod = solver.FindPathDFS;
+            else if (radioButtonLimitedDFS.Checked) findMethod = solver.FindPathLimitedDFS;
+            else if (radioButtonBiBFS.Checked) findMethod = solver.FindPathBiBFS;
             else
             {
-                MessageBox.Show("Choose a search method (BFS or DFS)!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Choose a search method (BFS, DFS, Limited DFS or Bi-BFS)!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -186,11 +212,18 @@ namespace AI_lab1
                 $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O length: {solver.oCountMax}\n",
                 "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
             );
-
-            await ShowPathAsync(path, Color.Purple);
+            buttonStart.Enabled = false;
+            buttonRestore.Enabled = false;
+            buttonAbyss.Enabled = false;
+            buttonClear.Enabled = false;
+            buttonCube.Enabled = false;
+            buttonMark.Enabled = false;
+            showPathCancellation = new CancellationTokenSource();
+            buttonSkip.Enabled = true;
+            await ShowPathAsync(showPathCancellation.Token, path, Color.Purple);
         }
 
-        private async Task ShowPathAsync(List<Node> path, Color color, bool markVisited = true)
+        private async Task ShowPathAsync(CancellationToken token, List<Node> path, Color color, bool markVisited = true)
         {
             foreach (var node in path)
             {
@@ -199,7 +232,8 @@ namespace AI_lab1
 
                 btn.BackColor = color;
                 btn.Text = node.Orientation.ToString();
-                await Task.Delay(500);
+                if (!token.IsCancellationRequested)
+                    await Task.Delay(500);
 
                 if (markVisited)
                 {
@@ -210,8 +244,39 @@ namespace AI_lab1
                     btn.BackColor = original;
                 }
             }
+            buttonClear.Enabled = true;
+            buttonSkip.Enabled = false;
         }
 
+        private void buttonRestore_Click(object sender, EventArgs e)
+        {
+            if (nodesPrevious == null)
+            {
+                MessageBox.Show("Use this at least after one run of the function!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
+            cubePos = cubePosPrevious;
+            markPos = markPosPrevious;
+
+            for (int i = 0; i < fieldSize.rows; i++)
+            {
+                for (int j = 0; j < fieldSize.cols; j++)
+                {
+                    if (nodesPrevious[i, j] == null) continue;
+                    fieldCells[i, j].BackColor = nodesPrevious[i, j].Color;
+                    fieldCells[i, j].Text = nodesPrevious[i, j].ButtonText;
+                    cellStates[i, j] = nodesPrevious[i, j].Abyss ? CellStates.Abyss : CellStates.Clean;
+                    nodesCurrent[i, j] = nodesPrevious[i, j];
+                }
+            }
+            buttonRestore.Enabled = false;
+        }
+
+        private void buttonSkip_Click(object sender, EventArgs e)
+        {
+            if (showPathCancellation == null) return;
+            showPathCancellation.Cancel();
+        }
     }
 }

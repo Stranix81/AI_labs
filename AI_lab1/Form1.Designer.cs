@@ -33,9 +33,13 @@
             buttonMark = new Button();
             buttonAbyss = new Button();
             buttonStart = new Button();
-            checkBoxBFS = new CheckBox();
-            checkBoxDFS = new CheckBox();
             buttonClear = new Button();
+            radioButtonBFS = new RadioButton();
+            radioButtonDFS = new RadioButton();
+            radioButtonLimitedDFS = new RadioButton();
+            radioButtonBiBFS = new RadioButton();
+            buttonRestore = new Button();
+            buttonSkip = new Button();
             SuspendLayout();
             // 
             // tableLayoutPanelField
@@ -103,29 +107,9 @@
             buttonStart.UseVisualStyleBackColor = true;
             buttonStart.Click += buttonStart_Click;
             // 
-            // checkBoxBFS
-            // 
-            checkBoxBFS.AutoSize = true;
-            checkBoxBFS.Location = new Point(582, 99);
-            checkBoxBFS.Name = "checkBoxBFS";
-            checkBoxBFS.Size = new Size(45, 19);
-            checkBoxBFS.TabIndex = 5;
-            checkBoxBFS.Text = "BFS";
-            checkBoxBFS.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxDFS
-            // 
-            checkBoxDFS.AutoSize = true;
-            checkBoxDFS.Location = new Point(636, 99);
-            checkBoxDFS.Name = "checkBoxDFS";
-            checkBoxDFS.Size = new Size(46, 19);
-            checkBoxDFS.TabIndex = 6;
-            checkBoxDFS.Text = "DFS";
-            checkBoxDFS.UseVisualStyleBackColor = true;
-            // 
             // buttonClear
             // 
-            buttonClear.Location = new Point(531, 70);
+            buttonClear.Location = new Point(531, 101);
             buttonClear.Name = "buttonClear";
             buttonClear.Size = new Size(206, 23);
             buttonClear.TabIndex = 7;
@@ -133,16 +117,84 @@
             buttonClear.UseVisualStyleBackColor = true;
             buttonClear.Click += buttonClear_Click;
             // 
+            // radioButtonBFS
+            // 
+            radioButtonBFS.AutoSize = true;
+            radioButtonBFS.Location = new Point(543, 160);
+            radioButtonBFS.Name = "radioButtonBFS";
+            radioButtonBFS.Size = new Size(44, 19);
+            radioButtonBFS.TabIndex = 8;
+            radioButtonBFS.TabStop = true;
+            radioButtonBFS.Text = "BFS";
+            radioButtonBFS.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonDFS
+            // 
+            radioButtonDFS.AutoSize = true;
+            radioButtonDFS.Location = new Point(655, 160);
+            radioButtonDFS.Name = "radioButtonDFS";
+            radioButtonDFS.Size = new Size(45, 19);
+            radioButtonDFS.TabIndex = 9;
+            radioButtonDFS.TabStop = true;
+            radioButtonDFS.Text = "DFS";
+            radioButtonDFS.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonLimitedDFS
+            // 
+            radioButtonLimitedDFS.AutoSize = true;
+            radioButtonLimitedDFS.Location = new Point(543, 185);
+            radioButtonLimitedDFS.Name = "radioButtonLimitedDFS";
+            radioButtonLimitedDFS.Size = new Size(88, 19);
+            radioButtonLimitedDFS.TabIndex = 10;
+            radioButtonLimitedDFS.TabStop = true;
+            radioButtonLimitedDFS.Text = "DFS Limited";
+            radioButtonLimitedDFS.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonBiBFS
+            // 
+            radioButtonBiBFS.AutoSize = true;
+            radioButtonBiBFS.Location = new Point(655, 185);
+            radioButtonBiBFS.Name = "radioButtonBiBFS";
+            radioButtonBiBFS.Size = new Size(59, 19);
+            radioButtonBiBFS.TabIndex = 11;
+            radioButtonBiBFS.TabStop = true;
+            radioButtonBiBFS.Text = "Bi-BFS";
+            radioButtonBiBFS.UseVisualStyleBackColor = true;
+            // 
+            // buttonRestore
+            // 
+            buttonRestore.Location = new Point(531, 130);
+            buttonRestore.Name = "buttonRestore";
+            buttonRestore.Size = new Size(206, 23);
+            buttonRestore.TabIndex = 12;
+            buttonRestore.Text = "Restore last state";
+            buttonRestore.UseVisualStyleBackColor = true;
+            buttonRestore.Click += buttonRestore_Click;
+            // 
+            // buttonSkip
+            // 
+            buttonSkip.Location = new Point(531, 72);
+            buttonSkip.Name = "buttonSkip";
+            buttonSkip.Size = new Size(206, 23);
+            buttonSkip.TabIndex = 13;
+            buttonSkip.Text = "Skip";
+            buttonSkip.UseVisualStyleBackColor = true;
+            buttonSkip.Click += buttonSkip_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.AppWorkspace;
             ClientSize = new Size(800, 450);
+            Controls.Add(buttonSkip);
+            Controls.Add(buttonRestore);
+            Controls.Add(radioButtonBiBFS);
+            Controls.Add(radioButtonLimitedDFS);
+            Controls.Add(radioButtonDFS);
+            Controls.Add(radioButtonBFS);
             Controls.Add(buttonClear);
             Controls.Add(tableLayoutPanelField);
-            Controls.Add(checkBoxDFS);
-            Controls.Add(checkBoxBFS);
             Controls.Add(buttonStart);
             Controls.Add(buttonAbyss);
             Controls.Add(buttonMark);
@@ -161,8 +213,12 @@
         private Button buttonMark;
         private Button buttonAbyss;
         private Button buttonStart;
-        private CheckBox checkBoxBFS;
-        private CheckBox checkBoxDFS;
         private Button buttonClear;
+        private RadioButton radioButtonBFS;
+        private RadioButton radioButtonDFS;
+        private RadioButton radioButtonLimitedDFS;
+        private RadioButton radioButtonBiBFS;
+        private Button buttonRestore;
+        private Button buttonSkip;
     }
 }
