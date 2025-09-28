@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AI_lab1.Library.Enums
 {
     /// <summary>
-    /// Cube's orientationstates
+    /// Cube's orientation states
     /// </summary>
     public enum CubeOrientation
     {

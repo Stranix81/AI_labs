@@ -12,6 +12,9 @@ namespace AI_lab1.Library
         private int rows = default;
         private int cols = default;
         private CellStates[,] grid;
+        public int iterCount = 0;
+        private bool P = false;
+        public int oCountMax = 1;
 
         public Solver(CellStates[,] gridStates)
         {
@@ -42,6 +45,7 @@ namespace AI_lab1.Library
         /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
         public List<Node>? FindPathBFS((int x, int y) start, (int x, int y) target)
         {
+            oCountMax = 1;
             var O = new Queue<Node>();            
             var C = new HashSet<(int, int, CubeOrientation)>();
 
@@ -61,6 +65,7 @@ namespace AI_lab1.Library
 
                 foreach (var move in Moves) //P: disclosure of X
                 {
+                    P = true;
                     int nrow = current.X + move.drow;
                     int ncol = current.Y + move.dcol;
 
@@ -70,8 +75,12 @@ namespace AI_lab1.Library
                     {
                         var nextOrientation = Roll(current.Orientation, move);
                         O.Enqueue(new Node(nrow, ncol, nextOrientation, current));
+                        if (O.Count  > oCountMax)
+                            oCountMax = O.Count;
                     }
                 }
+                if (P == true) iterCount++;
+                P = false;
             }
             return null;
         }
@@ -86,6 +95,8 @@ namespace AI_lab1.Library
         /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
         public List<Node>? FindPathDFS((int x, int y) start, (int x, int y) target)
         {
+            oCountMax = 1;
+            iterCount = 0;
             var O = new Stack<Node>();
             var C = new HashSet<(int, int, CubeOrientation)>();
 
@@ -101,9 +112,11 @@ namespace AI_lab1.Library
                 if (C.Contains((current.X, current.Y, current.Orientation))) continue;  //if this one has been visited
 
                 C.Add((current.X, current.Y, current.Orientation));  //x moves from O to C
+                oCountMax++;
 
                 foreach (var move in Moves) //P: disclosure of X
                 {
+                    P = true;
                     int nrow = current.X + move.drow;
                     int ncol = current.Y + move.dcol;
 
@@ -113,8 +126,12 @@ namespace AI_lab1.Library
                     {
                         var nextOri = Roll(current.Orientation, move);
                         O.Push(new Node(nrow, ncol, nextOri, current));
+                        if (O.Count > oCountMax)
+                            oCountMax = O.Count;
                     }
                 }
+                if(P == true) iterCount++;
+                P = false;
             }
 
             return null;

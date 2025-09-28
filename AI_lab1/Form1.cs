@@ -183,7 +183,7 @@ namespace AI_lab1
 
             int totalSteps = (path.Count - 1);
             MessageBox.Show(
-                $"The path has been found!\nSteps taken: {path.Count - 1}\n",
+                $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O length: {solver.oCountMax}\n",
                 "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
             );
 
