@@ -36,7 +36,7 @@
             buttonClear = new Button();
             radioButtonBFS = new RadioButton();
             radioButtonDFS = new RadioButton();
-            radioButtonLimitedDFS = new RadioButton();
+            radioButtonIDDFS = new RadioButton();
             radioButtonBiBFS = new RadioButton();
             buttonRestore = new Button();
             buttonSkip = new Button();
@@ -139,16 +139,16 @@
             radioButtonDFS.Text = "DFS";
             radioButtonDFS.UseVisualStyleBackColor = true;
             // 
-            // radioButtonLimitedDFS
+            // radioButtonIDDFS
             // 
-            radioButtonLimitedDFS.AutoSize = true;
-            radioButtonLimitedDFS.Location = new Point(543, 185);
-            radioButtonLimitedDFS.Name = "radioButtonLimitedDFS";
-            radioButtonLimitedDFS.Size = new Size(88, 19);
-            radioButtonLimitedDFS.TabIndex = 10;
-            radioButtonLimitedDFS.TabStop = true;
-            radioButtonLimitedDFS.Text = "DFS Limited";
-            radioButtonLimitedDFS.UseVisualStyleBackColor = true;
+            radioButtonIDDFS.AutoSize = true;
+            radioButtonIDDFS.Location = new Point(543, 185);
+            radioButtonIDDFS.Name = "radioButtonIDDFS";
+            radioButtonIDDFS.Size = new Size(56, 19);
+            radioButtonIDDFS.TabIndex = 10;
+            radioButtonIDDFS.TabStop = true;
+            radioButtonIDDFS.Text = "IDDFS";
+            radioButtonIDDFS.UseVisualStyleBackColor = true;
             // 
             // radioButtonBiBFS
             // 
@@ -190,7 +190,7 @@
             Controls.Add(buttonSkip);
             Controls.Add(buttonRestore);
             Controls.Add(radioButtonBiBFS);
-            Controls.Add(radioButtonLimitedDFS);
+            Controls.Add(radioButtonIDDFS);
             Controls.Add(radioButtonDFS);
             Controls.Add(radioButtonBFS);
             Controls.Add(buttonClear);
@@ -200,7 +200,7 @@
             Controls.Add(buttonMark);
             Controls.Add(buttonCube);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Lab 2";
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -216,7 +216,7 @@
         private Button buttonClear;
         private RadioButton radioButtonBFS;
         private RadioButton radioButtonDFS;
-        private RadioButton radioButtonLimitedDFS;
+        private RadioButton radioButtonIDDFS;
         private RadioButton radioButtonBiBFS;
         private Button buttonRestore;
         private Button buttonSkip;

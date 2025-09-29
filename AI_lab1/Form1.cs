@@ -140,7 +140,7 @@ namespace AI_lab1
         {
             radioButtonBFS.Checked = true;
             radioButtonDFS.Checked = false;
-            radioButtonLimitedDFS.Checked = false;
+            radioButtonIDDFS.Checked = false;
             radioButtonBiBFS.Checked = false;
             cubePos = null;
             markPos = null;
@@ -181,20 +181,28 @@ namespace AI_lab1
 
             var solver = new Solver(cellStates);
 
-
+            List<Node>? path = null;
             Func<(int x, int y), (int x, int y), List<Node>?>? findMethod = null;
 
-            if (radioButtonBFS.Checked) findMethod = solver.FindPathBFS;
-            else if (radioButtonDFS.Checked) findMethod = solver.FindPathDFS;
-            else if (radioButtonLimitedDFS.Checked) findMethod = solver.FindPathLimitedDFS;
-            else if (radioButtonBiBFS.Checked) findMethod = solver.FindPathBiBFS;
+            if (radioButtonIDDFS.Checked)
+            {
+                FormL formForL = new();
+                formForL.ShowDialog();
+                path = solver.FindPathIDDFS(cubePos.Value, markPos.Value, formForL.L);
+            }
             else
             {
-                MessageBox.Show("Choose a search method (BFS, DFS, Limited DFS or Bi-BFS)!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                if (radioButtonBFS.Checked) findMethod = solver.FindPathBFS;
+                else if (radioButtonDFS.Checked) findMethod = solver.FindPathDFS;
+                else if (radioButtonBiBFS.Checked) findMethod = solver.FindPathBiBFS;
+                else
+                {
+                    MessageBox.Show("Choose a search method (BFS, DFS, IDDFS or Bi-BFS)!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            var path = findMethod(cubePos.Value, markPos.Value);    //finding the path
+                path = findMethod(cubePos.Value, markPos.Value);    //finding the path
+            }
             if (path == null)
             {
                 MessageBox.Show("The path has not been found!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -209,7 +217,7 @@ namespace AI_lab1
 
             int totalSteps = (path.Count - 1);
             MessageBox.Show(
-                $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O length: {solver.oCountMax}\n",
+                $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O + C length: {solver.listsLengthMax}\n",
                 "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
             );
             buttonStart.Enabled = false;
