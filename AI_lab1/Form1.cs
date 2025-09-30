@@ -186,9 +186,9 @@ namespace AI_lab1
 
             if (radioButtonIDDFS.Checked)
             {
-                FormL formForL = new();
-                formForL.ShowDialog();
-                path = solver.FindPathIDDFS(cubePos.Value, markPos.Value, formForL.L);
+                //FormL formForL = new();
+                //formForL.ShowDialog();
+                path = solver.FindPathIDS(cubePos.Value, markPos.Value, 64);
             }
             else
             {
