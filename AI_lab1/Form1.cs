@@ -238,14 +238,20 @@ namespace AI_lab1
                 var btn = fieldCells[node.X, node.Y];
                 var original = btn.BackColor;
 
-                btn.BackColor = color;
-                btn.Text = node.Orientation.ToString();
+                if(!node.IsMeetingPoint)
+                    btn.BackColor = color;
+                else 
+                    btn.BackColor = Color.Green;
+
+                    btn.Text = node.Orientation.ToString();
                 if (!token.IsCancellationRequested)
                     await Task.Delay(500);
 
                 if (markVisited)
                 {
-                    btn.BackColor = Color.Gray;
+                    if(!node.IsMeetingPoint)
+                        btn.BackColor = Color.Gray;
+                    else btn.BackColor = Color.Green;
                 }
                 else
                 {
