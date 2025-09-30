@@ -266,6 +266,7 @@ namespace AI_lab1.Library
                         if (C_target.ContainsKey(state))
                         {
                             if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
+                            C_target[state].IsMeetingPoint = true;
                             return SplitAndReconstructPath(nextNode, C_target[state]);
                         }
                     }
@@ -298,6 +299,7 @@ namespace AI_lab1.Library
                         if (C_start.ContainsKey(state))
                         {
                             if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
+                            nextNode.IsMeetingPoint = true;
                             return SplitAndReconstructPath(C_start[state], nextNode);
                         }
                     }                   
