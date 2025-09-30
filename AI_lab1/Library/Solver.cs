@@ -251,6 +251,8 @@ namespace AI_lab1.Library
 
                     foreach (var move in Moves)
                     {
+                        P = true;
+
                         int nx = current.X + move.drow;
                         int ny = current.Y + move.dcol;
                         var nextOrientation = Roll(current.Orientation, move);
@@ -266,7 +268,6 @@ namespace AI_lab1.Library
                         O_start.Enqueue(nextNode);
                         listsLengthCurrent += 2;
 
-                        iterCount++;
                         if (C_target.ContainsKey(state))
                         {
                             if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
@@ -274,6 +275,9 @@ namespace AI_lab1.Library
                             return SplitAndReconstructPath(nextNode, C_target[state]);
                         }
                     }
+                    if (P == true) iterCount++;
+                    P = false;
+                    if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                 }
 
                 levelCount = O_target.Count;
@@ -284,6 +288,8 @@ namespace AI_lab1.Library
 
                     foreach (var move in Moves)
                     {
+                        P = true;
+
                         int nx = current.X + move.drow;
                         int ny = current.Y + move.dcol;
                         var nextOrientation = Roll(current.Orientation, move);
@@ -299,14 +305,16 @@ namespace AI_lab1.Library
                         O_target.Enqueue(nextNode);
                         listsLengthCurrent += 2;
                         
-                        iterCount++;
                         if (C_start.ContainsKey(state))
                         {
                             if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                             nextNode.IsMeetingPoint = true;
                             return SplitAndReconstructPath(C_start[state], nextNode);
                         }
-                    }                   
+                    }
+                    if (P == true) iterCount++;
+                    P = false;
+                    if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                 }
             }
 
