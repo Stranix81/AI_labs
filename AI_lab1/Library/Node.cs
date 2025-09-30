@@ -13,13 +13,15 @@ namespace AI_lab1.Library
         public int Y { get; }
         public Node? Parent { get; }
         public CubeOrientation Orientation { get; }
+        public int Depth { get; }
 
-        public Node(int x, int y, CubeOrientation orientation, Node? parent = null)
+        public Node(int x, int y, CubeOrientation orientation, Node? parent = null, int depth = 0)
         {
             X = x;
             Y = y;
             Orientation = orientation;
             Parent = parent;
+            Depth = depth;
         }
     }
 }
