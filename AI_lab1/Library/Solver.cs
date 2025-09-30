@@ -16,6 +16,7 @@ namespace AI_lab1.Library
         private bool P = false;
         public int listsLengthMax = 1;
         public int listsLengthCurrent = 1;
+        public int LFromIDS = 1;
 
         public Solver(CellStates[,] gridStates)
         {
@@ -172,7 +173,10 @@ namespace AI_lab1.Library
                     listsLengthCurrent--;
 
                     if ((current.X, current.Y) == target && current.Orientation == CubeOrientation.RedDown)
+                    {
+                        LFromIDS = L;
                         return ReconstructPath(current);
+                    }
 
                     if (current.Depth == L)
                     {
