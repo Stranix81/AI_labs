@@ -216,10 +216,19 @@ namespace AI_lab1
             }
 
             int totalSteps = (path.Count - 1);
-            MessageBox.Show(
-                $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O + C length: {solver.listsLengthMax}\n",
-                "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
-            );
+
+            if(radioButtonIDDFS.Checked)
+                MessageBox.Show(
+                    $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O + C length: {solver.listsLengthMax}\n" +
+                    $"L at which the solution is found: {solver.LFromIDS}\n",
+                    "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
+            else
+                MessageBox.Show(
+                    $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O + C length: {solver.listsLengthMax}\n",
+                    "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
+
             buttonStart.Enabled = false;
             buttonRestore.Enabled = false;
             buttonAbyss.Enabled = false;
