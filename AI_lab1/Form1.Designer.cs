@@ -144,10 +144,10 @@
             radioButtonIDDFS.AutoSize = true;
             radioButtonIDDFS.Location = new Point(543, 185);
             radioButtonIDDFS.Name = "radioButtonIDDFS";
-            radioButtonIDDFS.Size = new Size(42, 19);
+            radioButtonIDDFS.Size = new Size(56, 19);
             radioButtonIDDFS.TabIndex = 10;
             radioButtonIDDFS.TabStop = true;
-            radioButtonIDDFS.Text = "IDS";
+            radioButtonIDDFS.Text = "IDDFS";
             radioButtonIDDFS.UseVisualStyleBackColor = true;
             // 
             // radioButtonBiBFS
