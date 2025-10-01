@@ -9,17 +9,17 @@ namespace AI_labs.Core
 {
     public partial class Solver
     {
-        public int LFromIDS = 1;
+        public int LFromIDDFS = 1;
 
         /// <summary>
-        /// Finds the path using depth-first search with L+1 limit
+        /// Finds the path using iterative-deepening depth-first search
         /// </summary>
         /// <param name="start">Initial coordinates</param>
         /// <param name="target">Target coordinates</param>
         /// <returns> The path in the type of
         /// <see cref="List{Node}"/>, 
         /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
-        public List<Node>? FindPathIDS((int x, int y) start, (int x, int y) target, int maxL)
+        public List<Node>? FindPathIDDFS((int x, int y) start, (int x, int y) target, int maxL)
         {
             listsLengthMax = 1;
             listsLengthCurrent = 1;
@@ -41,7 +41,7 @@ namespace AI_labs.Core
 
                     if ((current.X, current.Y) == target && current.Orientation == CubeOrientation.RedDown)
                     {
-                        LFromIDS = L;
+                        LFromIDDFS = L;
                         return ReconstructPath(current);
                     }
 

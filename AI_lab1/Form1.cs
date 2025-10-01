@@ -188,7 +188,7 @@ namespace AI_lab1
             {
                 //FormL formForL = new();
                 //formForL.ShowDialog();
-                path = solver.FindPathIDS(cubePos.Value, markPos.Value, 64);
+                path = solver.FindPathIDDFS(cubePos.Value, markPos.Value, 64);
             }
             else
             {
@@ -220,7 +220,7 @@ namespace AI_lab1
             if(radioButtonIDDFS.Checked)
                 MessageBox.Show(
                     $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O + C length: {solver.listsLengthMax}\n" +
-                    $"L at which the solution is found: {solver.LFromIDS}\n",
+                    $"L at which the solution is found: {solver.LFromIDDFS}\n",
                     "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
             else

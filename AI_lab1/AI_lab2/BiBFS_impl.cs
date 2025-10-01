@@ -10,7 +10,7 @@ namespace AI_labs.Core
     public partial class Solver
     {
         /// <summary>
-        /// Finds the path using bidirectional search
+        /// Finds the path using bidirectional breadth-first search
         /// </summary>
         /// <param name="start">Initial coordinates</param>
         /// <param name="target">Target coordinates</param>
