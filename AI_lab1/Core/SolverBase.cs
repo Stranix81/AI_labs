@@ -17,7 +17,7 @@ namespace AI_labs.Core
         private bool P = false;
         public int listsLengthMax = 1;
         public int listsLengthCurrent = 1;
-        public int LFromIDS = 1;
+
 
         public Solver(CellStates[,] gridStates)
         {

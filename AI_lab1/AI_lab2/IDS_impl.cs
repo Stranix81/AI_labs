@@ -9,6 +9,8 @@ namespace AI_labs.Core
 {
     public partial class Solver
     {
+        public int LFromIDS = 1;
+
         /// <summary>
         /// Finds the path using depth-first search with L+1 limit
         /// </summary>
