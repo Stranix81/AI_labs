@@ -1,11 +1,12 @@
-﻿using AI_lab1.Library.Enums;
+﻿using AI_labs.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
-namespace AI_lab1.Library
+namespace AI_labs.Core
 {
     public class NodeForRestore
     {

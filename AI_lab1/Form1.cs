@@ -1,5 +1,4 @@
-using AI_lab1.Library.Enums;
-using AI_lab1.Library;
+using AI_labs.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using AI_labs.Core;
 
 namespace AI_lab1
 {
