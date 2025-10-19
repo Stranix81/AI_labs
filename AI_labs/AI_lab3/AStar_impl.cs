@@ -9,6 +9,15 @@ namespace AI_labs.Core
 {
     public partial class Solver
     {
+        /// <summary>
+        /// Finds the path using A* heuristic search
+        /// </summary>
+        /// <param name="start">Initial coordinates</param>
+        /// <param name="target">Target coordinates</param>
+        /// <param name="Heuristic">Heuristic</param>
+        /// <returns> The path in the type of
+        /// <see cref="List{Node}"/>, 
+        /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
         public List<Node>? FindPathAStar((int x, int y) start, (int x, int y) target, Func<int, int, int, int, CubeOrientation, int> Heuristic)
         {
             listsLengthMax = 1;
