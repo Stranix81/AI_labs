@@ -15,6 +15,16 @@ namespace AI_labs.Core
         public CubeOrientation Orientation { get; }
         public int Depth { get; }
         public bool IsMeetingPoint { get; set; }
+
+        // Cost from start to current node
+        public int G { get; set; }
+
+        // Heuristic cost estimate to goal
+        public int H { get; set; }
+
+        // Total cost (priority)
+        public int F => G + H;
+
         public Node(int x, int y, CubeOrientation orientation, Node? parent = null, int depth = 0, bool isMeetingPoint = false)
         {
             X = x;
