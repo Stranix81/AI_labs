@@ -40,6 +40,8 @@
             radioButtonBiBFS = new RadioButton();
             buttonRestore = new Button();
             buttonSkip = new Button();
+            radioButtonAStar = new RadioButton();
+            comboBoxHeuristic = new ComboBox();
             SuspendLayout();
             // 
             // tableLayoutPanelField
@@ -181,12 +183,33 @@
             buttonSkip.UseVisualStyleBackColor = true;
             buttonSkip.Click += buttonSkip_Click;
             // 
+            // radioButtonAStar
+            // 
+            radioButtonAStar.AutoSize = true;
+            radioButtonAStar.Location = new Point(655, 210);
+            radioButtonAStar.Name = "radioButtonAStar";
+            radioButtonAStar.Size = new Size(38, 19);
+            radioButtonAStar.TabIndex = 14;
+            radioButtonAStar.TabStop = true;
+            radioButtonAStar.Text = "A*";
+            radioButtonAStar.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxHeuristic
+            // 
+            comboBoxHeuristic.FormattingEnabled = true;
+            comboBoxHeuristic.Location = new Point(531, 209);
+            comboBoxHeuristic.Name = "comboBoxHeuristic";
+            comboBoxHeuristic.Size = new Size(118, 23);
+            comboBoxHeuristic.TabIndex = 15;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.AppWorkspace;
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBoxHeuristic);
+            Controls.Add(radioButtonAStar);
             Controls.Add(buttonSkip);
             Controls.Add(buttonRestore);
             Controls.Add(radioButtonBiBFS);
@@ -220,5 +243,7 @@
         private RadioButton radioButtonBiBFS;
         private Button buttonRestore;
         private Button buttonSkip;
+        private RadioButton radioButtonAStar;
+        private ComboBox comboBoxHeuristic;
     }
 }

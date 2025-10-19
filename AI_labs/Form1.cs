@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using AI_labs.Core;
+using AI_labs.AI_lab3.Heuristics;
 
 namespace AI_lab1
 {
@@ -45,6 +46,12 @@ namespace AI_lab1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            comboBoxHeuristic.Items.Add("Manhattan");
+            comboBoxHeuristic.Items.Add("Manhattan with the cube's face penalty");
+            //comboBoxHeuristic.Items.Add("Чебышева");
+            //comboBoxHeuristic.Items.Add("SMA*");
+            comboBoxHeuristic.SelectedIndex = 0;
+
             for (int i = 0; i < fieldSize.rows; i++)
             {
                 for (int j = 0; j < fieldSize.cols; j++)
@@ -195,9 +202,34 @@ namespace AI_lab1
                 if (radioButtonBFS.Checked) findMethod = solver.FindPathBFS;
                 else if (radioButtonDFS.Checked) findMethod = solver.FindPathDFS;
                 else if (radioButtonBiBFS.Checked) findMethod = solver.FindPathBiBFS;
+                else if (radioButtonAStar.Checked)
+                {
+                    Func<int, int, int, int, CubeOrientation, int> heuristic;
+
+                    switch (comboBoxHeuristic.SelectedItem?.ToString())
+                    {
+                        case "Manhattan":
+                            {
+                                heuristic = Heuristics.Manhattan;
+                                break;
+                            }
+                        case "Manhattan with the cube's face penalty":
+                            {
+                                heuristic = Heuristics.ManhattanWithPenalty;
+                                break;
+                            }
+                        //case "SMA*":
+                        //    heuristic = solver.CommonHeuristic;
+                        //    return solver.FindPathAStar(start, target, heuristic, 40);
+                        default:
+                            heuristic = Heuristics.Manhattan;
+                            break;
+                    }
+                    findMethod = (start, target) => solver.FindPathAStar(start, target, heuristic);
+                }
                 else
                 {
-                    MessageBox.Show("Choose a search method (BFS, DFS, IDDFS or Bi-BFS)!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Choose a search method (BFS, DFS, IDDFS, Bi-BFS, A*)!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
