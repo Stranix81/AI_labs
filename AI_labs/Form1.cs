@@ -48,7 +48,7 @@ namespace AI_lab1
         {
             comboBoxHeuristic.Items.Add("Manhattan");
             comboBoxHeuristic.Items.Add("Manhattan with the cube's face penalty");
-            //comboBoxHeuristic.Items.Add("Чебышева");
+            comboBoxHeuristic.Items.Add("Chebyshev");
             //comboBoxHeuristic.Items.Add("SMA*");
             comboBoxHeuristic.SelectedIndex = 0;
 
@@ -216,6 +216,11 @@ namespace AI_lab1
                         case "Manhattan with the cube's face penalty":
                             {
                                 heuristic = Heuristics.ManhattanWithPenalty;
+                                break;
+                            }
+                        case "Chebyshev":
+                            {
+                                heuristic = Heuristics.Chebyshev;
                                 break;
                             }
                         //case "SMA*":
