@@ -85,5 +85,19 @@ namespace AI_labs.AI_lab3.Heuristics
             }
             return manhattanDistance + penalty;
         }
+
+        /// <summary>
+        /// Calculates the maximum absolute difference between the corresponding coordinates of two points in space.
+        /// </summary>
+        /// <param name="x1">The X-coordinate of the current position.</param>
+        /// <param name="y1">The Y-coordinate of the current position.</param>
+        /// <param name="x2">The X-coordinate of the target position.</param>
+        /// <param name="y2">The Y-coordinate of the target position.</param>
+        /// <param name="orientation">The current cube orientation (unused in this heuristic).</param>
+        /// <returns>The Chebyshev distance between the two positions</returns>
+        public static int Chebyshev(int x1, int y1, int x2, int y2, CubeOrientation orientation)
+        {
+            return Math.Max(Math.Abs(x2 - x1), Math.Abs(y2 - y1));
+        }
     }
 }
