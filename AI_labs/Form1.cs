@@ -230,7 +230,10 @@ namespace AI_lab1
                             heuristic = Heuristics.Manhattan;
                             break;
                     }
-                    findMethod = (start, target) => solver.FindPathAStar(start, target, heuristic);
+                    FormL formL = new();
+                    formL.ShowDialog();
+
+                    findMethod = (start, target) => solver.FindPathAStar(start, target, heuristic, formL.L);
                 }
                 else
                 {
