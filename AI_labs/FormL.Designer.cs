@@ -36,7 +36,7 @@
             // 
             // buttonStart
             // 
-            buttonStart.Location = new Point(152, 86);
+            buttonStart.Location = new Point(194, 99);
             buttonStart.Name = "buttonStart";
             buttonStart.Size = new Size(75, 23);
             buttonStart.TabIndex = 0;
@@ -46,30 +46,31 @@
             // 
             // numericL
             // 
-            numericL.Location = new Point(107, 43);
+            numericL.Location = new Point(91, 43);
+            numericL.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             numericL.Name = "numericL";
-            numericL.Size = new Size(120, 23);
+            numericL.Size = new Size(178, 23);
             numericL.TabIndex = 1;
             // 
             // labelL
             // 
             labelL.AutoSize = true;
-            labelL.Location = new Point(27, 45);
+            labelL.Location = new Point(25, 45);
             labelL.Name = "labelL";
-            labelL.Size = new Size(47, 15);
+            labelL.Size = new Size(38, 15);
             labelL.TabIndex = 2;
-            labelL.Text = "L value:";
+            labelL.Text = "Value:";
             // 
             // FormL
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(248, 121);
+            ClientSize = new Size(281, 134);
             Controls.Add(labelL);
             Controls.Add(numericL);
             Controls.Add(buttonStart);
             Name = "FormL";
-            Text = "Choose max L value";
+            Text = "Choose max nodes count";
             ((System.ComponentModel.ISupportInitialize)numericL).EndInit();
             ResumeLayout(false);
             PerformLayout();

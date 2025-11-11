@@ -1,6 +1,7 @@
 ﻿using AI_labs.Core.Enums;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,15 +19,29 @@ namespace AI_labs.Core
         /// <returns> The path in the type of
         /// <see cref="List{Node}"/>, 
         /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
-        public List<Node>? FindPathAStar((int x, int y) start, (int x, int y) target, Func<int, int, int, int, CubeOrientation, int> Heuristic)
+        public List<Node>? FindPathAStar((int x, int y) start, (int x, int y) target, Func<int, int, int, int, CubeOrientation, int> Heuristic, int nodesLimit = 0)
         {
             listsLengthMax = 1;
             listsLengthCurrent = 1;
 
-            PriorityQueue<Node, int>? O = null;
+            bool useSMA = nodesLimit > 0;
+
+            PriorityQueue<Node, int>? oDefault = null;
+            SortedSet<Node>? oLimited = null;
             var C = new HashSet<(int, int, CubeOrientation)>();
 
-            O = new PriorityQueue<Node, int>();
+            if (useSMA)
+                oLimited = new SortedSet<Node>(Comparer<Node>.Create((first, second) =>
+                {
+                    int compare = first.F.CompareTo(second.F);
+                    if (compare == 0) compare = first.G.CompareTo(second.G);
+                    if (compare == 0) compare = first.Orientation.CompareTo(second.Orientation);
+                    if (compare == 0) compare = (first.X, first.Y).CompareTo((second.X, second.Y));
+                    return compare;
+                }));
+            else 
+            oDefault = new PriorityQueue<Node, int>();
+            
 
             var startNode = new Node(start.x, start.y, CubeOrientation.RedDown)
             {
@@ -34,11 +49,15 @@ namespace AI_labs.Core
                 H = Heuristic(start.x, start.y, target.x, target.y, CubeOrientation.RedDown)
             };
 
-            O.Enqueue(startNode, startNode.F);
+            if (useSMA)
+                oLimited.Add(startNode);
+            else
+                oDefault.Enqueue(startNode, startNode.F);
 
-            while (O.Count > 0)
+            while ((useSMA ? oLimited.Count : oDefault.Count) > 0)
             {
-                var current = O.Dequeue();  //x := first(O)
+                var current = useSMA ? oLimited.Min : oDefault.Dequeue(); //x := first(O)
+                if (useSMA) oLimited.Remove(current);
                 listsLengthCurrent--;
 
                 if ((current.X, current.Y) == target && current.Orientation == CubeOrientation.RedDown) //if this one is the target
@@ -66,14 +85,33 @@ namespace AI_labs.Core
                             G = current.G + 1,
                             H = Heuristic(nrow, ncol, target.x, target.y, nextOrientation)
                         };
-                        O.Enqueue(nextNode, nextNode.F);
+
+                        if (useSMA)
+                            oLimited.Add(nextNode);
+                        else
+                            oDefault.Enqueue(nextNode, nextNode.F);
+
                         listsLengthCurrent++;
                     }
                 }
+
                 if (P == true) iterCount++;
                 P = false;
                 if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
+
+                while (useSMA && oLimited.Count > nodesLimit)
+                {
+                    var max = oLimited.Max;
+                    oLimited.Remove(max);
+
+                    if (max.Parent != null)
+                        max.Parent.H = Math.Max(max.Parent.H, max.F);
+
+                    //if (oLimited.Count >= nodesLimit)
+                    //    return null;
+                }
             }
+
             return null;
         }
     }
