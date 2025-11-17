@@ -13,11 +13,11 @@ namespace AI_labs.Core
         private int rows = default;
         private int cols = default;
         private CellStates[,] grid;
-        public int iterCount = 0;
-        private bool P = false;
+        public int pCount = 0;
         public int listsLengthMax = 1;
         public int listsLengthCurrent = 1;
-
+        public int oLengthMax = 1;
+        public int cLengthMax = 0;
 
         public Solver(CellStates[,] gridStates)
         {
@@ -107,22 +107,6 @@ namespace AI_labs.Core
             return path;
         }
 
-        /// <summary>
-        /// Splits and reconstructs the whole path from the parent refs (for Bi-BFS)
-        /// </summary>
-        /// <param name="node_start"></param>
-        /// <param name="node_target"></param>
-        /// <returns></returns>
-        private List<Node> SplitAndReconstructPath(Node node_start, Node node_target)
-        {
-            var path = ReconstructPath(node_start);
-            path.RemoveAt(path.Count - 1);
-            while (node_target != null)
-            {
-                path.Add(node_target);
-                node_target = node_target.Parent!;
-            }
-            return path;
-        }
+
     }
 }

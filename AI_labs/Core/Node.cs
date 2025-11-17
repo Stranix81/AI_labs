@@ -22,8 +22,11 @@ namespace AI_labs.Core
         // Heuristic cost estimate to goal
         public int H { get; set; }
 
+        // Inheritants' worst (greatest) F
+        public int BackupF { get; set; } = int.MinValue;
+
         // Total cost (priority)
-        public int F => G + H;
+        public int F => Math.Max(G + H, BackupF);
 
         public Node(int x, int y, CubeOrientation orientation, Node? parent = null, int depth = 0, bool isMeetingPoint = false)
         {

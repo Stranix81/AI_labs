@@ -21,7 +21,8 @@ namespace AI_labs.Core
         {
             listsLengthMax = 4;
             listsLengthCurrent = 4;
-            iterCount = 0;
+            pCount = 0;
+
             var O_start = new Queue<Node>();
             var C_start = new Dictionary<(int, int, CubeOrientation), Node>();
 
@@ -47,8 +48,6 @@ namespace AI_labs.Core
 
                     foreach (var move in Moves)
                     {
-                        P = true;
-
                         int nx = current.X + move.drow;
                         int ny = current.Y + move.dcol;
                         var nextOrientation = Roll(current.Orientation, move);
@@ -71,8 +70,7 @@ namespace AI_labs.Core
                             return SplitAndReconstructPath(nextNode, C_target[state]);
                         }
                     }
-                    if (P == true) iterCount++;
-                    P = false;
+                    pCount++;
                     if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                 }
 
@@ -84,8 +82,6 @@ namespace AI_labs.Core
 
                     foreach (var move in Moves)
                     {
-                        P = true;
-
                         int nx = current.X + move.drow;
                         int ny = current.Y + move.dcol;
                         var nextOrientation = Roll(current.Orientation, move);
@@ -108,13 +104,30 @@ namespace AI_labs.Core
                             return SplitAndReconstructPath(C_start[state], nextNode);
                         }
                     }
-                    if (P == true) iterCount++;
-                    P = false;
+                    pCount++;
+
                     if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                 }
             }
-
             return null;
+        }
+
+        /// <summary>
+        /// Splits and reconstructs the whole path from the parent refs (for Bi-BFS)
+        /// </summary>
+        /// <param name="node_start"></param>
+        /// <param name="node_target"></param>
+        /// <returns></returns>
+        private List<Node> SplitAndReconstructPath(Node node_start, Node node_target)
+        {
+            var path = ReconstructPath(node_start);
+            path.RemoveAt(path.Count - 1);
+            while (node_target != null)
+            {
+                path.Add(node_target);
+                node_target = node_target.Parent!;
+            }
+            return path;
         }
     }
 }
