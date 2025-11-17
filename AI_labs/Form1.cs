@@ -259,13 +259,16 @@ namespace AI_lab1
 
             if(radioButtonIDDFS.Checked)
                 MessageBox.Show(
-                    $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O + C length: {solver.listsLengthMax}\n" +
+                    $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.pCount - 1}\nMax O + C length: {solver.listsLengthMax}\n" +
                     $"L at which the solution is found: {solver.LFromIDDFS}\n",
                     "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
             else
                 MessageBox.Show(
-                    $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.iterCount - 1}\nMax O + C length: {solver.listsLengthMax}\n",
+                    $"The path has been found!\nSteps taken: {path.Count - 1}\nIteration count: {solver.pCount - 1}\n" +
+                    $"Max O length: {solver.oLengthMax}\n" +
+                    $"Max C length: {solver.cLengthMax}\n" +
+                    $"Max O + C length: {solver.listsLengthMax}\n",           
                     "Info", MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
 

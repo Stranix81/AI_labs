@@ -22,7 +22,7 @@ namespace AI_labs.Core
         {
             listsLengthMax = 1;
             listsLengthCurrent = 1;
-            iterCount = 0;
+            pCount = 0;
             var O = new Stack<Node>();
             var C = new HashSet<(int, int, CubeOrientation)>();
 
@@ -31,7 +31,6 @@ namespace AI_labs.Core
             while (O.Count > 0)
             {
                 var current = O.Pop();
-                listsLengthCurrent--;
 
                 if ((current.X, current.Y) == target && current.Orientation == CubeOrientation.RedDown) //if this one is the target
                     return ReconstructPath(current);
@@ -39,11 +38,10 @@ namespace AI_labs.Core
                 if (C.Contains((current.X, current.Y, current.Orientation))) continue;  //if this one has been visited
 
                 C.Add((current.X, current.Y, current.Orientation));  //x moves from O to C
-                listsLengthCurrent++;
+                cLengthMax = Math.Max(cLengthMax, C.Count);
 
                 foreach (var move in Moves) //P: disclosure of X
                 {
-                    P = true;
                     int nrow = current.X + move.drow;
                     int ncol = current.Y + move.dcol;
 
@@ -53,14 +51,14 @@ namespace AI_labs.Core
                     {
                         var nextOri = Roll(current.Orientation, move);
                         O.Push(new Node(nrow, ncol, nextOri, current));
-                        listsLengthCurrent++;
+
+                        listsLengthCurrent = O.Count + C.Count;
+                        oLengthMax = Math.Max(oLengthMax, O.Count);
+                        listsLengthMax = Math.Max(listsLengthMax, listsLengthCurrent);
                     }
                 }
-                if (P == true) iterCount++;
-                P = false;
-                if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
+                pCount++;
             }
-
             return null;
         }
     }

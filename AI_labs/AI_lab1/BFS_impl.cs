@@ -29,7 +29,6 @@ namespace AI_labs.Core
             while (O.Count > 0)
             {
                 var current = O.Dequeue();  //x := first(O)
-                listsLengthCurrent--;
 
                 if ((current.X, current.Y) == target && current.Orientation == CubeOrientation.RedDown) //if this one is the target
                     return ReconstructPath(current);
@@ -38,11 +37,10 @@ namespace AI_labs.Core
                     continue;
 
                 C.Add((current.X, current.Y, current.Orientation)); //x moves from O to C
-                listsLengthCurrent++;
+                cLengthMax = Math.Max(cLengthMax, C.Count);
 
                 foreach (var move in Moves) //P: disclosure of X
                 {
-                    P = true;
                     int nrow = current.X + move.drow;
                     int ncol = current.Y + move.dcol;
 
@@ -52,12 +50,13 @@ namespace AI_labs.Core
                     {
                         var nextOrientation = Roll(current.Orientation, move);
                         O.Enqueue(new Node(nrow, ncol, nextOrientation, current));
-                        listsLengthCurrent++;
+
+                        listsLengthCurrent = O.Count + C.Count;
+                        oLengthMax = Math.Max(oLengthMax, O.Count);
+                        listsLengthMax = Math.Max(listsLengthMax, listsLengthCurrent);
                     }
                 }
-                if (P == true) iterCount++;
-                P = false;
-                if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
+                pCount++;
             }
             return null;
         }

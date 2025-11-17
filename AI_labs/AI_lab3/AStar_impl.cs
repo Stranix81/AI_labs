@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AI_labs.Core
 {
@@ -23,42 +24,32 @@ namespace AI_labs.Core
         {
             listsLengthMax = 1;
             listsLengthCurrent = 1;
+            oLengthMax = 1;
+            cLengthMax = 0;
 
             bool useSMA = nodesLimit > 0;
 
-            PriorityQueue<Node, int>? oDefault = null;
-            SortedSet<Node>? oLimited = null;
+            var O = new List<Node>();
             var C = new HashSet<(int, int, CubeOrientation)>();
-
-            if (useSMA)
-                oLimited = new SortedSet<Node>(Comparer<Node>.Create((first, second) =>
-                {
-                    int compare = first.F.CompareTo(second.F);
-                    if (compare == 0) compare = first.G.CompareTo(second.G);
-                    if (compare == 0) compare = first.Orientation.CompareTo(second.Orientation);
-                    if (compare == 0) compare = (first.X, first.Y).CompareTo((second.X, second.Y));
-                    return compare;
-                }));
-            else 
-            oDefault = new PriorityQueue<Node, int>();
-            
 
             var startNode = new Node(start.x, start.y, CubeOrientation.RedDown)
             {
                 G = 0,
                 H = Heuristic(start.x, start.y, target.x, target.y, CubeOrientation.RedDown)
             };
+            O.Add(startNode);
 
-            if (useSMA)
-                oLimited.Add(startNode);
-            else
-                oDefault.Enqueue(startNode, startNode.F);
-
-            while ((useSMA ? oLimited.Count : oDefault.Count) > 0)
+            while (O.Count > 0)
             {
-                var current = useSMA ? oLimited.Min : oDefault.Dequeue(); //x := first(O)
-                if (useSMA) oLimited.Remove(current);
-                listsLengthCurrent--;
+                O.Sort((a, b) =>
+                {
+                    int cmp = a.F.CompareTo(b.F);
+                    if (cmp == 0) cmp = a.G.CompareTo(b.G);
+                    if (cmp == 0) cmp = (Math.Abs(target.x - a.X), Math.Abs(target.y - a.Y)).CompareTo((Math.Abs(target.x - b.X), Math.Abs(target.y - b.Y)));
+                    return cmp;
+                });
+                var current = O[0];
+                O.RemoveAt(0);
 
                 if ((current.X, current.Y) == target && current.Orientation == CubeOrientation.RedDown) //if this one is the target
                     return ReconstructPath(current);
@@ -66,12 +57,11 @@ namespace AI_labs.Core
                 if (C.Contains((current.X, current.Y, current.Orientation)))    //if this one has been visited
                     continue;
 
-                C.Add((current.X, current.Y, current.Orientation)); //x moves from O to C
-                listsLengthCurrent++;
+                C.Add((current.X, current.Y, current.Orientation)); //X moves from O to C
+                cLengthMax = Math.Max(cLengthMax, C.Count); 
 
                 foreach (var move in Moves) //P: disclosure of X
                 {
-                    P = true;
                     int nrow = current.X + move.drow;
                     int ncol = current.Y + move.dcol;
 
@@ -86,33 +76,55 @@ namespace AI_labs.Core
                             H = Heuristic(nrow, ncol, target.x, target.y, nextOrientation)
                         };
 
-                        if (useSMA)
-                            oLimited.Add(nextNode);
-                        else
-                            oDefault.Enqueue(nextNode, nextNode.F);
+                        O.Add(nextNode);
 
-                        listsLengthCurrent++;
+                        if (useSMA && O.Count > nodesLimit)
+                        {
+                            O.Sort((a, b) =>
+                            {
+                                int cmp = b.F.CompareTo(a.F);
+                                if (cmp == 0) cmp = b.G.CompareTo(a.G);
+                                if (cmp == 0) cmp = (Math.Abs(target.x - b.X), Math.Abs(target.y - b.Y)).CompareTo((Math.Abs(target.x - a.X), Math.Abs(target.y - a.Y)));
+                                return cmp;
+                            });
+                            var worst = O[0];
+                            O.RemoveAt(0);
+
+                            PropagateBackup(worst, O);
+                        }
+
+                        listsLengthCurrent = O.Count + C.Count;
+                        oLengthMax = Math.Max(oLengthMax, O.Count);
+                        listsLengthMax = Math.Max(listsLengthMax, listsLengthCurrent);
                     }
                 }
-
-                if (P == true) iterCount++;
-                P = false;
-                if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
-
-                while (useSMA && oLimited.Count > nodesLimit)
-                {
-                    var max = oLimited.Max;
-                    oLimited.Remove(max);
-
-                    if (max.Parent != null)
-                        max.Parent.H = Math.Max(max.Parent.H, max.F);
-
-                    //if (oLimited.Count >= nodesLimit)
-                    //    return null;
-                }
+                pCount++;
             }
-
             return null;
+        }
+
+        /// <summary>
+        /// Propagates the updated BackupF value of a removed node up the search tree.
+        /// </summary>
+        /// <param name="removedNode">The node that has been removed from the open list and whose F value should be propagated.</param>
+        /// <param name="O">The current open list containing nodes that are still eligible for expansion.</param>
+        private void PropagateBackup(Node removedNode, List<Node> O)
+        {
+            Node node = removedNode;    //the removed one
+            while (node.Parent != null) 
+            {
+                var parent = node.Parent;   //the removed one's parent
+
+                int oldF = parent.F;    //the removed one's parent's F
+                parent.BackupF = Math.Max(parent.BackupF, node.F);  //the parent must know the max F of its inheritants; it's stored in BackupF
+
+                if (!O.Contains(parent)) break; //if the parent is not in the open collection, there's no need to deal with it
+
+                if (parent.F == oldF)   //if the parent's F hasn't changed after the propagation, the F of all its ancestors will not change either
+                    break;
+
+                node = parent;  //now all of the above must be done with the parent and so on..
+            }
         }
     }
 }
