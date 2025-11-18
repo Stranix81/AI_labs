@@ -14,23 +14,26 @@ namespace AI_labs.Core
         /// </summary>
         /// <param name="start">Initial coordinates</param>
         /// <param name="target">Target coordinates</param>
+        /// <param name="startOrientation">Orientation of the initial node</param>
+        /// <param name="checkOrientation">Check target orientation or not</param>
         /// <returns> The path in the type of
         /// <see cref="List{Node}"/>, 
         /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
-        public List<Node>? FindPathBFS((int x, int y) start, (int x, int y) target)
+        public List<Node>? FindPathBFS((int x, int y) start, (int x, int y) target, CubeOrientation startOrientation = CubeOrientation.RedDown, bool checkOrientation = true)
         {
             listsLengthMax = 1;
             listsLengthCurrent = 1;
+            pCount = 0;
             var O = new Queue<Node>();
             var C = new HashSet<(int, int, CubeOrientation)>();
 
-            O.Enqueue(new Node(start.x, start.y, CubeOrientation.RedDown));
+            O.Enqueue(new Node(start.x, start.y, startOrientation));
 
             while (O.Count > 0)
             {
                 var current = O.Dequeue();  //x := first(O)
 
-                if ((current.X, current.Y) == target && current.Orientation == CubeOrientation.RedDown) //if this one is the target
+                if ((current.X, current.Y) == target && (current.Orientation == CubeOrientation.RedDown || checkOrientation == false)) //if this one is the target
                     return ReconstructPath(current);
 
                 if (C.Contains((current.X, current.Y, current.Orientation)))    //if this one has been visited
