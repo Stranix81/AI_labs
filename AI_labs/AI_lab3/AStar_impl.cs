@@ -126,5 +126,33 @@ namespace AI_labs.Core
                 node = parent;  //now all of the above must be done with the parent and so on..
             }
         }
+
+        /// <summary>
+        /// Generate pattern database for A* search.
+        /// </summary>
+        /// <param name="target">Target coordinates</param>
+        /// <returns>A dictionary with heuristics based on two templates</returns>
+        public Dictionary<(int x, int y, CubeOrientation orientation), int> GenerateDatabase((int x, int y) target)
+        {
+            var heuristicFirst = new Dictionary<CubeOrientation, int>();
+            // Template 1
+            foreach (var orientation in (CubeOrientation[]) Enum.GetValues(typeof(CubeOrientation)))
+                heuristicFirst.Add(orientation, FindPathBFS(target, target, orientation).Count);
+
+            // Template 2
+            var heuristicSecond = new Dictionary<(int x, int y), int>();
+            for (int i = 0; i < 8; ++i)
+                for (int j = 0; j < 8; ++j)
+                    heuristicSecond.Add((i, j), FindPathBFS((i, j), target, CubeOrientation.RedDown, false).Count);
+
+            // Final database
+            var heuristicFinal = new Dictionary<(int x, int y, CubeOrientation orientation), int>();
+            for (int i = 0; i < 8; ++i)
+                for (int j = 0; j < 8; ++j)
+                    foreach (var orientation in (CubeOrientation[])Enum.GetValues(typeof(CubeOrientation)))
+                        heuristicFinal.Add((i, j, orientation), heuristicFirst[orientation] + heuristicSecond[(i, j)]);
+            
+            return heuristicFinal;
+        }
     }
 }

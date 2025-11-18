@@ -1,3 +1,6 @@
+using AI_labs;
+using AI_labs.AI_lab3.Heuristics;
+using AI_labs.Core;
 using AI_labs.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -9,8 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using AI_labs.Core;
-using AI_labs.AI_lab3.Heuristics;
+using static System.Windows.Forms.DataFormats;
 
 namespace AI_lab1
 {
@@ -49,6 +51,7 @@ namespace AI_lab1
             comboBoxHeuristic.Items.Add("Manhattan");
             comboBoxHeuristic.Items.Add("Manhattan with the cube's face penalty");
             comboBoxHeuristic.Items.Add("Chebyshev");
+            comboBoxHeuristic.Items.Add("Pattern databases");
             //comboBoxHeuristic.Items.Add("SMA*");
             comboBoxHeuristic.SelectedIndex = 0;
 
@@ -199,7 +202,7 @@ namespace AI_lab1
             }
             else
             {
-                if (radioButtonBFS.Checked) findMethod = solver.FindPathBFS;
+                if (radioButtonBFS.Checked) findMethod = (start, target) => solver.FindPathBFS(start, target);
                 else if (radioButtonDFS.Checked) findMethod = solver.FindPathDFS;
                 else if (radioButtonBiBFS.Checked) findMethod = solver.FindPathBiBFS;
                 else if (radioButtonAStar.Checked)
@@ -221,6 +224,12 @@ namespace AI_lab1
                         case "Chebyshev":
                             {
                                 heuristic = Heuristics.Chebyshev;
+                                break;
+                            }
+                        case "Pattern databases":
+                            {
+                                Heuristics.patternDB = solver.GenerateDatabase(markPos.Value);
+                                heuristic = Heuristics.PatternDatabases;
                                 break;
                             }
                         //case "SMA*":

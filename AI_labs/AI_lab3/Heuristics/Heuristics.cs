@@ -9,6 +9,8 @@ namespace AI_labs.AI_lab3.Heuristics
 {
     public class Heuristics
     {
+        public static Dictionary<(int x, int y, CubeOrientation orientation), int>? patternDB = null;
+
         /// <summary>
         /// Calculates the Manhattan distance between two grid positions.
         /// This heuristic estimates the minimal number of moves required 
@@ -98,6 +100,22 @@ namespace AI_labs.AI_lab3.Heuristics
         public static int Chebyshev(int x1, int y1, int x2, int y2, CubeOrientation orientation)
         {
             return Math.Max(Math.Abs(x2 - x1), Math.Abs(y2 - y1));
+        }
+
+        /// <summary>
+        /// Returns a value from the pre-generated pattern database
+        /// </summary>
+        /// <param name="x1">The X-coordinate of the current position.</param>
+        /// <param name="y1">The Y-coordinate of the current position.</param>
+        /// <param name="x2">The X-coordinate of the target position (unused in this heuristic).</param>
+        /// <param name="y2">The Y-coordinate of the target position (unused in this heuristic).</param>
+        /// <param name="orientation">The current cube orientation (unused in this heuristic).</param>
+        /// <returns>A value from the previously generated pattern database</returns>
+        public static int PatternDatabases(int x1, int y1, int x2, int y2, CubeOrientation orientation)
+        {
+            if (patternDB is null)
+                throw new Exception("Не инициализирована база данных с шаблонами");
+            return patternDB[(x1, y1, orientation)];
         }
     }
 }
