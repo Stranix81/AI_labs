@@ -31,13 +31,23 @@ namespace AI_labs.AI_lab3.Heuristics
         }
 
         /// <summary>
-        /// Calculates the Manhattan distance between two grid positions, 
-        /// adding an orientation-based penalty depending on the cube’s red face direction.
-        /// 
-        /// This heuristic estimates the minimal number of moves required 
-        /// to reach the target cell and align the cube’s red face correctly.
-        /// The penalty increases the estimated cost when the red face 
-        /// is not already facing downward toward the target cell.
+        /// Calculates a Manhattan-based admissible heuristic for the rolling-cube puzzle.
+        /// <para>
+        /// Rules:
+        /// <list type="bullet">
+        /// <item>
+        /// If the cube is 2+ steps away, the path to the target provides enough room
+        /// to correct the orientation “for free”, so no penalty is added.
+        /// </item>
+        /// <item>
+        /// If the cube is exactly 1 step away, a penalty is added only if rolling
+        /// toward the target does NOT place the red face on the bottom.
+        /// </item>
+        /// <item>
+        /// If the cube is already on the target, no penalty is added.
+        /// </item>
+        /// </list>
+        /// </para>
         /// </summary>
         /// <param name="x1">The X-coordinate of the current position.</param>
         /// <param name="y1">The Y-coordinate of the current position.</param>
@@ -52,40 +62,35 @@ namespace AI_labs.AI_lab3.Heuristics
         {
             int manhattanDistance = Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
             int penalty = 0;
-            switch(orientation)
-            {
-                case CubeOrientation.RedUp:
-                    {
-                        penalty = 2;
-                        break;
-                    }
-                case CubeOrientation.RedRight:
-                    {
-                        penalty = 1;
-                        break;
-                    }
-                case CubeOrientation.RedLeft:
-                    {
-                        penalty = 1;
-                        break;
-                    }
-                case CubeOrientation.RedFront:
-                    {
-                        penalty = 1;
-                        break;
-                    }
-                case CubeOrientation.RedBack:
-                    {
-                        penalty = 1;
-                        break;
-                    }
-                default:
-                    {
-                        penalty = 0;
-                        break;
-                    }
-            }
-            return manhattanDistance + penalty;
+
+            //--- case 1: already on the target ---
+            if (manhattanDistance == 0)
+                return 0;
+
+            //--- case 2: target is 2+ steps away ---
+            // There is enough room to correct orientation naturally during movement.
+            if (manhattanDistance >= 2)
+                return manhattanDistance;
+
+            //--- case 3: target is exactly 1 step away ---
+            //only add penalty if moving toward the target does NOT bring red face down.
+  
+            // Determine the direction of the target relative to the cube.
+            int moveX = Math.Sign(x2 - x1); // +1 right, -1 left, 0 none
+            int moveY = Math.Sign(y2 - y1); // +1 down, -1 up, 0 none
+
+            // Check if rolling in that direction puts red face down.
+            bool redWillBeDown =
+                (moveX == 1 && orientation == CubeOrientation.RedRight) ||
+                (moveX == -1 && orientation == CubeOrientation.RedLeft) ||
+                (moveY == 1 && orientation == CubeOrientation.RedFront) ||
+                (moveY == -1 && orientation == CubeOrientation.RedBack);
+
+            if (redWillBeDown)
+                return 1;    // manhattan = 1, no penalty needed
+
+            //otherwise, at least one additional move is needed before reaching the target
+            return 1 + 1;
         }
 
         /// <summary>
