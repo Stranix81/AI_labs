@@ -223,7 +223,7 @@
             Controls.Add(buttonMark);
             Controls.Add(buttonCube);
             Name = "Form1";
-            Text = "Lab 2";
+            Text = "Edging the cube";
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
