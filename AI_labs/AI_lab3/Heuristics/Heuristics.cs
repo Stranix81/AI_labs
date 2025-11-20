@@ -44,7 +44,7 @@ namespace AI_labs.AI_lab3.Heuristics
         /// toward the target does NOT place the red face on the bottom.
         /// </item>
         /// <item>
-        /// If the cube is already on the target, no penalty is added.
+        /// If the cube is already on the target, penalty is added only when the orientation is not the target.
         /// </item>
         /// </list>
         /// </para>
@@ -63,8 +63,15 @@ namespace AI_labs.AI_lab3.Heuristics
             int manhattanDistance = Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
 
             //--- case 1: already on the target ---
-            if (manhattanDistance == 0)
+            if (manhattanDistance == 0 && orientation == CubeOrientation.RedDown)
                 return 0;
+            if(manhattanDistance == 0)
+            {
+                if (orientation == CubeOrientation.RedDown)
+                    return 0;
+
+                return 2; // need at least two moves to get red face down and get back to the target cell
+            }
 
             //--- case 2: target is 2+ steps away ---
             // There is enough room to correct orientation naturally during movement.
