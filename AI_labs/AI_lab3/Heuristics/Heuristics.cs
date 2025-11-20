@@ -61,7 +61,6 @@ namespace AI_labs.AI_lab3.Heuristics
         public static int ManhattanWithPenalty(int x1, int y1, int x2, int y2, CubeOrientation orientation)
         {
             int manhattanDistance = Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
-            int penalty = 0;
 
             //--- case 1: already on the target ---
             if (manhattanDistance == 0)
