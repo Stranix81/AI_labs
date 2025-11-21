@@ -22,6 +22,7 @@ namespace AI_labs.Core
         /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
         public List<Node>? FindPathAStar((int x, int y) start, (int x, int y) target, Func<int, int, int, int, CubeOrientation, int> Heuristic, int nodesLimit = 0)
         {
+            genNodesCount = 0;
             listsLengthMax = 1;
             listsLengthCurrent = 1;
             oLengthMax = 1;
@@ -93,6 +94,7 @@ namespace AI_labs.Core
                             PropagateBackup(worst, O);
                         }
 
+                        genNodesCount++;
                         listsLengthCurrent = O.Count + C.Count;
                         oLengthMax = Math.Max(oLengthMax, O.Count);
                         listsLengthMax = Math.Max(listsLengthMax, listsLengthCurrent);

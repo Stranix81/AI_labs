@@ -24,6 +24,8 @@ namespace AI_labs.Core
             listsLengthMax = 1;
             listsLengthCurrent = 1;
             pCount = 0;
+            genNodesCount = 0;
+
             var O = new Queue<Node>();
             var C = new HashSet<(int, int, CubeOrientation)>();
 
@@ -54,6 +56,7 @@ namespace AI_labs.Core
                         var nextOrientation = Roll(current.Orientation, move);
                         O.Enqueue(new Node(nrow, ncol, nextOrientation, current));
 
+                        genNodesCount++;
                         listsLengthCurrent = O.Count + C.Count;
                         oLengthMax = Math.Max(oLengthMax, O.Count);
                         listsLengthMax = Math.Max(listsLengthMax, listsLengthCurrent);

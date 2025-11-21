@@ -24,6 +24,9 @@ namespace AI_labs.Core
             listsLengthMax = 1;
             listsLengthCurrent = 1;
             pCount = 0;
+            cLengthMax = 0;
+            oLengthMax = 1;
+            genNodesCount = 0;
 
             for (int L = 0; L <= maxL; L++)
             {
@@ -67,6 +70,7 @@ namespace AI_labs.Core
                             var nextOri = Roll(current.Orientation, move);
                             O.Push(new Node(nrow, ncol, nextOri, current, current.Depth + 1));
 
+                            genNodesCount++;
                             listsLengthCurrent = O.Count + C.Count;
                             oLengthMax = Math.Max(oLengthMax, O.Count);
                             listsLengthMax = Math.Max(listsLengthMax, listsLengthCurrent);
