@@ -28,7 +28,7 @@ namespace AI_lab1
         private CellStates[,] cellStates;
         private NodeForRestore?[,] nodesCurrent;
         private NodeForRestore?[,] nodesPrevious;
-        private CancellationTokenSource showPathCancellation;
+        private CancellationTokenSource? showPathCancellation;
 
         public Form1()
         {
@@ -242,7 +242,7 @@ namespace AI_lab1
                     FormL formL = new();
                     formL.ShowDialog();
 
-                    findMethod = (start, target) => solver.FindPathAStar(start, target, heuristic, formL.L);
+                    findMethod = (start, target) => solver.FindPathAStar(start, target, heuristic, formL.L, checkOrientation:true);
                 }
                 else
                 {

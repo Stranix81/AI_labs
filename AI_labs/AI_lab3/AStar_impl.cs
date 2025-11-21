@@ -20,7 +20,7 @@ namespace AI_labs.Core
         /// <returns> The path in the type of
         /// <see cref="List{Node}"/>, 
         /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
-        public List<Node>? FindPathAStar((int x, int y) start, (int x, int y) target, Func<int, int, int, int, CubeOrientation, int> Heuristic, int nodesLimit = 0)
+        public List<Node>? FindPathAStar((int x, int y) start, (int x, int y) target, Func<int, int, int, int, CubeOrientation, int> Heuristic, int nodesLimit = 0, bool checkOrientation = true)
         {
             genNodesCount = 0;
             listsLengthMax = 1;
@@ -52,7 +52,7 @@ namespace AI_labs.Core
                 var current = O[0];
                 O.RemoveAt(0);
 
-                if ((current.X, current.Y) == target && current.Orientation == CubeOrientation.RedDown) //if this one is the target
+                if ((current.X, current.Y) == target && (current.Orientation == CubeOrientation.RedDown || checkOrientation == false)) //if this one is the target
                     return ReconstructPath(current);
 
                 if (C.Contains((current.X, current.Y, current.Orientation)))    //if this one has been visited
