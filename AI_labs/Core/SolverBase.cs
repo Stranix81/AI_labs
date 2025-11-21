@@ -14,6 +14,7 @@ namespace AI_labs.Core
         private int cols = default;
         private CellStates[,] grid;
         public int pCount = 0;
+        public int genNodesCount = 0;
         public int listsLengthMax = 1;
         public int listsLengthCurrent = 1;
         public int oLengthMax = 1;

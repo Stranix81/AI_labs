@@ -22,6 +22,9 @@ namespace AI_labs.Core
             listsLengthMax = 4;
             listsLengthCurrent = 4;
             pCount = 0;
+            genNodesCount = 0;
+            oLengthMax = 1;
+            cLengthMax = 0;
 
             var O_start = new Queue<Node>();
             var C_start = new Dictionary<(int, int, CubeOrientation), Node>();
