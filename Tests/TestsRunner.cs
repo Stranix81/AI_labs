@@ -39,18 +39,18 @@ namespace Tests
             testResults = new Dictionary<string, List<(int d, int iter, int gen, int mem)>>()
             {
                 { "BFS", new() },
-                { "IDDFS", new() },
+                { "Bi-BFS", new() },
                 { "A*(Manhattan)", new() },
-                { "A*(ManhattanWithPenalty)", new() }
+                { "A*(Chebyshev)", new() }
             };
 
             foreach (var (start, target, field) in tests)
             {
                 var solver = new Solver((CellStates[,])field.Clone());
                 RunTests("BFS", (s, t) => solver.FindPathBFS(s, t), start, target, solver, testResults);
-                RunTests("IDDFS", (s, t) => solver.FindPathIDDFS(s, t, 64), start, target, solver, testResults);
+                RunTests("Bi-BFS", (s, t) => solver.FindPathBiBFS(s, t), start, target, solver, testResults);
                 RunTests("A*(Manhattan)", (s, t) => solver.FindPathAStar(s, t, Heuristics.Manhattan), start, target, solver, testResults);
-                RunTests("A*(ManhattanWithPenalty)", (s, t) => solver.FindPathAStar(s, t, Heuristics.ManhattanWithPenalty), start, target, solver, testResults);
+                RunTests("A*(Chebyshev)", (s, t) => solver.FindPathAStar(s, t, Heuristics.Chebyshev), start, target, solver, testResults);
             }
 
             avgN.Clear();

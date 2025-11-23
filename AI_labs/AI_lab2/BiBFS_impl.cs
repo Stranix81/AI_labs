@@ -19,11 +19,11 @@ namespace AI_labs.Core
         /// where <typeparamref name="T"/> - <see cref="Node"/>.</returns>
         public List<Node>? FindPathBiBFS((int x, int y) start, (int x, int y) target)
         {
-            listsLengthMax = 4;
-            listsLengthCurrent = 4;
+            listsLengthMax = 2;
+            listsLengthCurrent = 2;
             pCount = 0;
             genNodesCount = 0;
-            oLengthMax = 1;
+            oLengthMax = 2;
             cLengthMax = 0;
 
             var O_start = new Queue<Node>();
@@ -47,7 +47,6 @@ namespace AI_labs.Core
                 for (int i = 0; i < levelCount; i++)
                 {
                     var current = O_start.Dequeue();
-                    listsLengthCurrent--;
 
                     foreach (var move in Moves)
                     {
@@ -64,24 +63,25 @@ namespace AI_labs.Core
                         var nextNode = new Node(nx, ny, nextOrientation, current, current.Depth + 1);
                         C_start[state] = nextNode;
                         O_start.Enqueue(nextNode);
-                        listsLengthCurrent += 2;
+                        genNodesCount++;
+                        listsLengthCurrent = O_start.Count + C_start.Count + O_target.Count + C_target.Count;
+                        oLengthMax = Math.Max(oLengthMax, O_start.Count + O_target.Count);
+                        cLengthMax = Math.Max(cLengthMax, C_start.Count + C_target.Count);
+                        listsLengthMax = Math.Max(listsLengthMax, listsLengthCurrent);
 
                         if (C_target.ContainsKey(state))
                         {
-                            if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                             C_target[state].IsMeetingPoint = true;
                             return SplitAndReconstructPath(nextNode, C_target[state]);
                         }
                     }
                     pCount++;
-                    if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                 }
 
                 levelCount = O_target.Count;
                 for (int i = 0; i < levelCount; i++)
                 {
                     var current = O_target.Dequeue();
-                    listsLengthCurrent--;
 
                     foreach (var move in Moves)
                     {
@@ -98,18 +98,19 @@ namespace AI_labs.Core
                         var nextNode = new Node(nx, ny, nextOrientation, current, current.Depth + 1);
                         C_target[state] = nextNode;
                         O_target.Enqueue(nextNode);
-                        listsLengthCurrent += 2;
+                        genNodesCount++;
+                        listsLengthCurrent = O_start.Count + C_start.Count + O_target.Count + C_target.Count;
+                        oLengthMax = Math.Max(oLengthMax, O_start.Count + O_target.Count);
+                        cLengthMax = Math.Max(cLengthMax, C_start.Count + C_target.Count);
+                        listsLengthMax = Math.Max(listsLengthMax, listsLengthCurrent);
 
                         if (C_start.ContainsKey(state))
                         {
-                            if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                             nextNode.IsMeetingPoint = true;
                             return SplitAndReconstructPath(C_start[state], nextNode);
                         }
                     }
                     pCount++;
-
-                    if (listsLengthCurrent > listsLengthMax) listsLengthMax = listsLengthCurrent;
                 }
             }
             return null;
